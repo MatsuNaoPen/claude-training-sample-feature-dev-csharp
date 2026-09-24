@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # デモ用リポジトリ同梱: 現在のブランチから main へのプルリクエストを作る。
 # origin の URL で GitBucket / GitHub を自動判定する。説明文は docs/pr-draft.md（1行目=タイトル、以降=本文）。
-# 使い方: feature/ ディレクトリで  scripts/create-pr.sh [base]      （base 省略時 main）
+# 使い方: リポジトリのルートで  scripts/create-pr.sh [base]      （base 省略時 main）
 set -euo pipefail
 export GIT_TERMINAL_PROMPT=0
 
