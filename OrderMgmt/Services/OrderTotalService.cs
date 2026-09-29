@@ -20,6 +20,11 @@ public sealed class OrderTotalService
     {
         ArgumentNullException.ThrowIfNull(line);
 
+        if (line.Quantity < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(line), "数量は 0 以上にしてください。");
+        }
+
         if (line.Quantity > MaxQuantity)
         {
             throw new ArgumentOutOfRangeException(nameof(line), $"数量は {MaxQuantity} 以下にしてください。");
@@ -28,7 +33,7 @@ public sealed class OrderTotalService
         return line.Quantity * line.UnitPrice + line.ShippingFee;
     }
 
-    /// <summary>注文合計 = 明細金額の合計。</summary>
+    /// <summary>注文合計 = 明細金額の合計。数量 0 の明細は合計に含めない（docs/spec-exclude-zero-qty.md）。</summary>
     public decimal CalculateOrderTotal(Order order)
     {
         ArgumentNullException.ThrowIfNull(order);
@@ -36,6 +41,13 @@ public sealed class OrderTotalService
         decimal total = 0;
         foreach (var line in order.Lines)
         {
+            ArgumentNullException.ThrowIfNull(line);
+
+            if (line.Quantity == 0)
+            {
+                continue;
+            }
+
             total += CalculateLineAmount(line);
         }
 
